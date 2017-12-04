@@ -12,6 +12,10 @@
 		12B2EDAB1FD5473700D78E2A /* BackgroundTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 12B2EDA91FD5473700D78E2A /* BackgroundTracker.xcdatamodeld */; };
 		12B2EDAD1FD5473700D78E2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12B2EDAC1FD5473700D78E2A /* Assets.xcassets */; };
 		12B2EDB01FD5473700D78E2A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12B2EDAE1FD5473700D78E2A /* LaunchScreen.storyboard */; };
+		12B2EDB81FD5479700D78E2A /* LocationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B2EDB71FD5479700D78E2A /* LocationTableViewController.swift */; };
+		12B2EDBA1FD548DB00D78E2A /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B2EDB91FD548DB00D78E2A /* CoreDataManager.swift */; };
+		12B2EDBD1FD5499300D78E2A /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B2EDBB1FD5499300D78E2A /* Location+CoreDataClass.swift */; };
+		12B2EDBE1FD5499300D78E2A /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B2EDBC1FD5499300D78E2A /* Location+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +26,10 @@
 		12B2EDAC1FD5473700D78E2A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		12B2EDAF1FD5473700D78E2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		12B2EDB11FD5473700D78E2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		12B2EDB71FD5479700D78E2A /* LocationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewController.swift; sourceTree = "<group>"; };
+		12B2EDB91FD548DB00D78E2A /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		12B2EDBB1FD5499300D78E2A /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataClass.swift"; sourceTree = "<group>"; };
+		12B2EDBC1FD5499300D78E2A /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +62,9 @@
 		12B2EDA11FD5473700D78E2A /* BackgroundTracker */ = {
 			isa = PBXGroup;
 			children = (
+				12B2EDC01FD549CB00D78E2A /* CoreDataStack */,
 				12B2EDA21FD5473700D78E2A /* AppDelegate.swift */,
+				12B2EDB71FD5479700D78E2A /* LocationTableViewController.swift */,
 				12B2EDA61FD5473700D78E2A /* Main.storyboard */,
 				12B2EDAC1FD5473700D78E2A /* Assets.xcassets */,
 				12B2EDAE1FD5473700D78E2A /* LaunchScreen.storyboard */,
@@ -62,6 +72,16 @@
 				12B2EDA91FD5473700D78E2A /* BackgroundTracker.xcdatamodeld */,
 			);
 			path = BackgroundTracker;
+			sourceTree = "<group>";
+		};
+		12B2EDC01FD549CB00D78E2A /* CoreDataStack */ = {
+			isa = PBXGroup;
+			children = (
+				12B2EDB91FD548DB00D78E2A /* CoreDataManager.swift */,
+				12B2EDBB1FD5499300D78E2A /* Location+CoreDataClass.swift */,
+				12B2EDBC1FD5499300D78E2A /* Location+CoreDataProperties.swift */,
+			);
+			path = CoreDataStack;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,6 +158,10 @@
 			files = (
 				12B2EDAB1FD5473700D78E2A /* BackgroundTracker.xcdatamodeld in Sources */,
 				12B2EDA31FD5473700D78E2A /* AppDelegate.swift in Sources */,
+				12B2EDBE1FD5499300D78E2A /* Location+CoreDataProperties.swift in Sources */,
+				12B2EDBA1FD548DB00D78E2A /* CoreDataManager.swift in Sources */,
+				12B2EDBD1FD5499300D78E2A /* Location+CoreDataClass.swift in Sources */,
+				12B2EDB81FD5479700D78E2A /* LocationTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
