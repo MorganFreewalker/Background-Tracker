@@ -10,9 +10,8 @@ import UIKit
 import CoreData
 import CoreLocation
 
-class LocationTableViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class LocationTableViewController: UITableViewController, LocationManagerDelegate {
     
-    var cl = CLLocationManager()
     var locations = [Location]()
     
     override func viewDidLoad() {
@@ -25,35 +24,13 @@ class LocationTableViewController: UITableViewController, NSFetchedResultsContro
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateScreen), name: NSNotification.Name.NSManagedObjectContextDidSave, object: nil)
-        
-        self.cl = CLLocationManager()
-        if CLLocationManager.authorizationStatus() == .authorizedAlways {
-            cl.delegate = self
-            cl.allowsBackgroundLocationUpdates = true
-            print(cl.pausesLocationUpdatesAutomatically)
-            cl.pausesLocationUpdatesAutomatically = false
-            cl.allowDeferredLocationUpdates(untilTraveled: CLLocationDistance.init(100), timeout: TimeInterval.init(60))
-            cl.startUpdatingLocation()
-            cl.startMonitoringSignificantLocationChanges()
-        } else {
-            cl.requestAlwaysAuthorization()
-        }
-
         tableView.tableFooterView = UIView()
         self.updateScreen()
     }
     
     @objc func updateScreen(){
         print("#################################################################")
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let fr: NSFetchRequest<Location> = Location.fetchRequest()
-        fr.sortDescriptors = [NSSortDescriptor.init(key: "date", ascending: true)]
-        
-        do {
-            self.locations = try context.fetch(fr)
-        } catch {
-            print("Ooops.")
-        }
+        self.locations = CoreDataLocationFacade.getLocations()
         self.tableView.reloadData()
     }
 
@@ -139,33 +116,4 @@ class LocationTableViewController: UITableViewController, NSFetchedResultsContro
         // Pass the selected object to the new view controller.
     }
 
-}
-
-extension LocationTableViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error.localizedDescription)
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let ed = NSEntityDescription.entity(forEntityName: "Location", in: context)
-        locations.forEach { (location) in
-            let locationBase = Location(entity: ed!, insertInto: context)
-            locationBase.date = location.timestamp as NSDate
-            locationBase.longitude = location.coordinate.longitude
-            locationBase.latitude = location.coordinate.latitude
-        }
-        try! context.save()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if CLLocationManager.authorizationStatus() == .authorizedAlways {
-            cl.delegate = self
-            cl.allowsBackgroundLocationUpdates = true
-            cl.pausesLocationUpdatesAutomatically = false
-            cl.allowDeferredLocationUpdates(untilTraveled: CLLocationDistance.init(100), timeout: TimeInterval.init(60))
-            cl.startUpdatingLocation()
-            cl.startMonitoringSignificantLocationChanges()
-        }
-    }
 }
