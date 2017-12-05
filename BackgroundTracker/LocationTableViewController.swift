@@ -29,6 +29,10 @@ class LocationTableViewController: UITableViewController, NSFetchedResultsContro
         self.cl = CLLocationManager()
         if CLLocationManager.authorizationStatus() == .authorizedAlways {
             cl.delegate = self
+            cl.allowsBackgroundLocationUpdates = true
+            print(cl.pausesLocationUpdatesAutomatically)
+            cl.pausesLocationUpdatesAutomatically = false
+            cl.allowDeferredLocationUpdates(untilTraveled: CLLocationDistance.init(100), timeout: TimeInterval.init(60))
             cl.startUpdatingLocation()
             cl.startMonitoringSignificantLocationChanges()
         } else {
@@ -83,7 +87,7 @@ class LocationTableViewController: UITableViewController, NSFetchedResultsContro
         let longitude = self.locations[indexPath.row].longitude
         let rawDate = self.locations[indexPath.row].date!
         let date = DateFormatter.localizedString(from: rawDate as Date, dateStyle: .medium, timeStyle: .medium)
-        cell.textLabel?.text = "\(latitude)\(longitude)"
+        cell.textLabel?.text = "\(latitude) \(longitude)"
         cell.detailTextLabel?.text = date
 
         return cell
@@ -145,16 +149,23 @@ extension LocationTableViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let ed = NSEntityDescription.entity(forEntityName: "Location", in: context)
-        let location = Location(entity: ed!, insertInto: context)
-        location.date = Date() as NSDate
-        location.longitude = (locations.last?.coordinate.longitude)!
-        location.latitude = (locations.last?.coordinate.latitude)!
+        locations.forEach { (location) in
+            let locationBase = Location(entity: ed!, insertInto: context)
+            locationBase.date = location.timestamp as NSDate
+            locationBase.longitude = location.coordinate.longitude
+            locationBase.latitude = location.coordinate.latitude
+        }
         try! context.save()
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if CLLocationManager.authorizationStatus() == .authorizedAlways {
-            self.cl.startUpdatingLocation()
+            cl.delegate = self
+            cl.allowsBackgroundLocationUpdates = true
+            cl.pausesLocationUpdatesAutomatically = false
+            cl.allowDeferredLocationUpdates(untilTraveled: CLLocationDistance.init(100), timeout: TimeInterval.init(60))
+            cl.startUpdatingLocation()
+            cl.startMonitoringSignificantLocationChanges()
         }
     }
 }
