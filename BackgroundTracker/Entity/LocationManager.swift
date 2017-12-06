@@ -25,15 +25,14 @@ class LocationManager: NSObject, LocationManagerProtocol {
     override init(){
         super.init()
         self.cl = CLLocationManager()
+        self.cl.delegate = self
         
         if CLLocationManager.authorizationStatus() == .authorizedAlways {
             cl.allowsBackgroundLocationUpdates = true
-            print(cl.pausesLocationUpdatesAutomatically)
             cl.pausesLocationUpdatesAutomatically = false
             cl.allowDeferredLocationUpdates(untilTraveled: CLLocationDistance.init(100), timeout: TimeInterval.init(60))
         } else {
             cl.requestAlwaysAuthorization()
-            print("OK!")
         }
 
     }

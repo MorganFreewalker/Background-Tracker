@@ -91,12 +91,15 @@ class LocationInteractor: LocationInteractorProtocol {
     }
     
     func addNew(location: LocationModel) {
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let ed = NSEntityDescription.entity(forEntityName: "Location", in: context)
-        let locationDB = Location(entity: ed!, insertInto: context)
-        locationDB.date = location.date
-        locationDB.latitude = location.coordinate.latitude
-        locationDB.longitude = location.coordinate.longitude
+        if let context = coreDataManager?.persistentContainer.viewContext {
+            let ed = NSEntityDescription.entity(forEntityName: "Location", in: context)
+            let locationDB = Location(entity: ed!, insertInto: context)
+            locationDB.date = location.date
+            locationDB.latitude = location.coordinate.latitude
+            locationDB.longitude = location.coordinate.longitude
+            coreDataManager?.saveContext()
+        }
+
     }
     
     

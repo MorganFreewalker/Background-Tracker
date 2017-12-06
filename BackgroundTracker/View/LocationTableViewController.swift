@@ -28,8 +28,6 @@ class LocationTableViewController: UITableViewController, LocationTableViewContr
     }
     
     func updateScreen(){
-        print("#################################################################")
-        
         self.tableView.reloadData()
     }
 

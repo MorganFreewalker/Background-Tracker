@@ -26,9 +26,12 @@ class Router: RouterProtocol {
         startView.presenter = presenter
         presenter.view = startView
         let interactor = LocationInteractor()
+        let locationManager = LocationManager()
         presenter.interactor = interactor
         interactor.coreDataManager = CoreDataManager.shared
+        interactor.locationManager = locationManager
         interactor.presenter = presenter
+        locationManager.interactor = interactor
         self.window?.rootViewController = startView as! UIViewController
         interactor.startGeotracking()
     }
