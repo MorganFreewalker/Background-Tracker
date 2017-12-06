@@ -9,7 +9,12 @@
 import Foundation
 import CoreData
 
-class CoreDataManager {
+protocol CoreDataManagerProtocol {
+    var persistentContainer: NSPersistentContainer {get set}
+    func saveContext()
+}
+
+class CoreDataManager: CoreDataManagerProtocol {
     
     static let shared = CoreDataManager()
     

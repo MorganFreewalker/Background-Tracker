@@ -9,9 +9,16 @@
 import Foundation
 import CoreLocation
 
-class LocationManager: NSObject, CLLocationManagerDelegate {
+protocol LocationManagerProtocol: CLLocationManagerDelegate {
+    var interactor: LocationInteractorProtocol? {get set}
     
-    var delegate: LocationManagerDelegate
+    func stopGeotracking()
+    func startGeotracking()
+}
+
+class LocationManager: NSObject, LocationManagerProtocol {
+    
+    var interactor: LocationInteractorProtocol?
     
     var cl = CLLocationManager()
     
@@ -20,17 +27,25 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         self.cl = CLLocationManager()
         
         if CLLocationManager.authorizationStatus() == .authorizedAlways {
-            cl.delegate = self.delegate
             cl.allowsBackgroundLocationUpdates = true
             print(cl.pausesLocationUpdatesAutomatically)
             cl.pausesLocationUpdatesAutomatically = false
             cl.allowDeferredLocationUpdates(untilTraveled: CLLocationDistance.init(100), timeout: TimeInterval.init(60))
-            cl.startUpdatingLocation()
-            cl.startMonitoringSignificantLocationChanges()
         } else {
             cl.requestAlwaysAuthorization()
+            print("OK!")
         }
 
+    }
+    
+    func startGeotracking() {
+        self.cl.startUpdatingLocation()
+        self.cl.startMonitoringSignificantLocationChanges()
+    }
+    
+    func stopGeotracking() {
+        self.cl.stopUpdatingLocation()
+        self.cl.stopMonitoringSignificantLocationChanges()
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -38,15 +53,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let ed = NSEntityDescription.entity(forEntityName: "Location", in: context)
         locations.forEach { (location) in
-            let locationBase = Location(entity: ed!, insertInto: context)
-            locationBase.date = location.timestamp as NSDate
-            locationBase.longitude = location.coordinate.longitude
-            locationBase.latitude = location.coordinate.latitude
+            let locationModel = LocationModel(date: location.timestamp as NSDate, coordinate: Coorditate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude))
+            self.interactor?.addNew(location: locationModel)
         }
-        try! context.save()
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -59,9 +69,4 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             cl.startMonitoringSignificantLocationChanges()
         }
     }
-}
-
-protocol LocationManagerDelegate: CLLocationManagerDelegate {
-    func updateScreen()
-    
 }

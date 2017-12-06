@@ -8,29 +8,28 @@
 
 import UIKit
 import CoreData
-import CoreLocation
 
-class LocationTableViewController: UITableViewController, LocationManagerDelegate {
+protocol LocationTableViewControllerProtocol: UITableViewDelegate {
+    var presenter: PresenterProtocol? {get set}
+    func updateScreen()
+}
+
+class LocationTableViewController: UITableViewController, LocationTableViewControllerProtocol {
     
-    var locations = [Location]()
+    var presenter: PresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.updateScreen), name: NSNotification.Name.NSManagedObjectContextDidSave, object: nil)
         tableView.tableFooterView = UIView()
-        self.updateScreen()
     }
     
-    @objc func updateScreen(){
+    func updateScreen(){
         print("#################################################################")
-        self.locations = CoreDataLocationFacade.getLocations()
+        
         self.tableView.reloadData()
     }
 
@@ -48,35 +47,32 @@ class LocationTableViewController: UITableViewController, LocationManagerDelegat
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.locations.count > 0 ? self.locations.count : 1
+        return presenter?.numberOfRowAt(section: section) ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "locationCellID", for: indexPath)
-
+        
         // Configure the cell...
-        if self.locations.isEmpty {
-            cell.textLabel?.text = "No locations in database"
-            cell.detailTextLabel?.text = ""
-            return cell
+        if let location = presenter?.locationForCellAt(indexPath: indexPath) {
+            let latitude = location.coordinate.latitude
+            let longitude = location.coordinate.longitude
+            let rawDate = location.date
+            let date = DateFormatter.localizedString(from: rawDate as Date, dateStyle: .medium, timeStyle: .medium)
+            cell.textLabel?.text = "\(latitude) \(longitude)"
+            cell.detailTextLabel?.text = date
         }
-        let latitude = self.locations[indexPath.row].latitude
-        let longitude = self.locations[indexPath.row].longitude
-        let rawDate = self.locations[indexPath.row].date!
-        let date = DateFormatter.localizedString(from: rawDate as Date, dateStyle: .medium, timeStyle: .medium)
-        cell.textLabel?.text = "\(latitude) \(longitude)"
-        cell.detailTextLabel?.text = date
-
+        
         return cell
     }
 
-    /*
+    
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
-        return true
+        return presenter?.canDeleteCell ?? false
     }
-    */
+    
 
   /*
     // Override to support editing the table view.
