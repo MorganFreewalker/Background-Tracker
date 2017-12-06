@@ -34,12 +34,15 @@ class LocationManager: NSObject, LocationManagerProtocol {
         } else {
             cl.requestAlwaysAuthorization()
         }
-
     }
     
     func startGeotracking() {
-        self.cl.startUpdatingLocation()
-        self.cl.startMonitoringSignificantLocationChanges()
+        if CLLocationManager.authorizationStatus() == .authorizedAlways {
+            self.cl.startUpdatingLocation()
+            self.cl.startMonitoringSignificantLocationChanges()
+        } else {
+            self.cl.requestAlwaysAuthorization()
+        }
     }
     
     func stopGeotracking() {
