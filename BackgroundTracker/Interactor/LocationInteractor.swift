@@ -99,7 +99,6 @@ class LocationInteractor: LocationInteractorProtocol {
             locationDB.longitude = location.coordinate.longitude
             coreDataManager?.saveContext()
         }
-
     }
     
     

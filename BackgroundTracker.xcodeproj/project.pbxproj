@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1246F0C91FD6DF8500E4FC84 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1246F0C81FD6DF8500E4FC84 /* LocationManager.swift */; };
 		1246F0CB1FD6E27900E4FC84 /* LocationInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1246F0CA1FD6E27900E4FC84 /* LocationInteractor.swift */; };
+		1298C9A81FD934F200E97FA0 /* BarButtonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1298C9A71FD934F200E97FA0 /* BarButtonViewController.swift */; };
 		12B2EDA31FD5473700D78E2A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B2EDA21FD5473700D78E2A /* AppDelegate.swift */; };
 		12B2EDA81FD5473700D78E2A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12B2EDA61FD5473700D78E2A /* Main.storyboard */; };
 		12B2EDAB1FD5473700D78E2A /* BackgroundTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 12B2EDA91FD5473700D78E2A /* BackgroundTracker.xcdatamodeld */; };
@@ -26,6 +27,7 @@
 /* Begin PBXFileReference section */
 		1246F0C81FD6DF8500E4FC84 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		1246F0CA1FD6E27900E4FC84 /* LocationInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInteractor.swift; sourceTree = "<group>"; };
+		1298C9A71FD934F200E97FA0 /* BarButtonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BarButtonViewController.swift; path = BackgroundTracker/View/BarButtonViewController.swift; sourceTree = SOURCE_ROOT; };
 		12B2ED9F1FD5473700D78E2A /* BackgroundTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackgroundTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12B2EDA21FD5473700D78E2A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12B2EDA71FD5473700D78E2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				12B2EDB71FD5479700D78E2A /* LocationTableViewController.swift */,
+				1298C9A71FD934F200E97FA0 /* BarButtonViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 				1246F0CB1FD6E27900E4FC84 /* LocationInteractor.swift in Sources */,
 				12B2EDAB1FD5473700D78E2A /* BackgroundTracker.xcdatamodeld in Sources */,
 				12B2EDA31FD5473700D78E2A /* AppDelegate.swift in Sources */,
+				1298C9A81FD934F200E97FA0 /* BarButtonViewController.swift in Sources */,
 				12B2EDBE1FD5499300D78E2A /* Location+CoreDataProperties.swift in Sources */,
 				12F68C2B1FD7E60D00B34BC1 /* Presenter.swift in Sources */,
 				12F68C261FD7D85B00B34BC1 /* Location.swift in Sources */,

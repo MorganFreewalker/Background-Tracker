@@ -9,14 +9,23 @@
 import UIKit
 import CoreData
 
-protocol LocationTableViewControllerProtocol: UITableViewDelegate {
+protocol LocationTableViewControllerProtocol {
     var presenter: PresenterProtocol? {get set}
     func updateScreen()
 }
 
-class LocationTableViewController: UITableViewController, LocationTableViewControllerProtocol {
+protocol BarButtonViewDelegate {
+    func startButtonPressed()
+    func stopButtonPressed()
+    func dropDBButtonPressed()
+    func mapButtonPressed()
+}
+
+class LocationsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, LocationTableViewControllerProtocol, BarButtonViewDelegate {
     
     var presenter: PresenterProtocol?
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var containerView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +33,17 @@ class LocationTableViewController: UITableViewController, LocationTableViewContr
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
+        tableView.delegate = self
+        tableView.dataSource = self
         tableView.tableFooterView = UIView()
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 20
+        let barViewController = storyboard?.instantiateViewController(withIdentifier: "barButtonControllerID") as! BarButtonViewController
+        self.addChildViewController(barViewController)
+        barViewController.view.frame = self.containerView.bounds
+        self.containerView.addSubview(barViewController.view)
+        barViewController.delegate = self
+        barViewController.didMove(toParentViewController: self)
     }
     
     func updateScreen(){
@@ -38,17 +57,17 @@ class LocationTableViewController: UITableViewController, LocationTableViewContr
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return presenter?.numberOfRowAt(section: section) ?? 0
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "locationCellID", for: indexPath)
         
         // Configure the cell...
@@ -66,7 +85,7 @@ class LocationTableViewController: UITableViewController, LocationTableViewContr
 
     
     // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return presenter?.canDeleteCell ?? false
     }
@@ -110,4 +129,21 @@ class LocationTableViewController: UITableViewController, LocationTableViewContr
         // Pass the selected object to the new view controller.
     }
 
+    func startButtonPressed() {
+        self.presenter?.startButtonPressed()
+    }
+    
+    func stopButtonPressed() {
+        self.presenter?.stopButtonPressed()
+    }
+    
+    func dropDBButtonPressed() {
+        self.presenter?.dropDBButtonPressed()
+    }
+    
+    func mapButtonPressed() {
+        self.presenter?.mapButtonPressed()
+    }
+    
+    
 }

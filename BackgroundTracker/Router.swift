@@ -12,6 +12,7 @@ import UIKit
 protocol RouterProtocol {
     var window: UIWindow? {get set}
     func presentStartView()
+    func presentMapView()
 }
 
 class Router: RouterProtocol {
@@ -21,10 +22,11 @@ class Router: RouterProtocol {
     
     func presentStartView() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let startView = storyboard.instantiateViewController(withIdentifier: "locationsTableViewControllerID") as! LocationTableViewControllerProtocol
+        var startViewController = storyboard.instantiateViewController(withIdentifier: "locationsListViewControllerID") as! LocationTableViewControllerProtocol
         let presenter = Presenter()
-        startView.presenter = presenter
-        presenter.view = startView
+        startViewController.presenter = presenter
+        presenter.view = startViewController
+        presenter.router = self
         let interactor = LocationInteractor()
         let locationManager = LocationManager()
         presenter.interactor = interactor
@@ -32,7 +34,10 @@ class Router: RouterProtocol {
         interactor.locationManager = locationManager
         interactor.presenter = presenter
         locationManager.interactor = interactor
-        self.window?.rootViewController = startView as! UIViewController
-        interactor.startGeotracking()
+        self.window?.rootViewController = startViewController as? UIViewController
+    }
+    
+    func presentMapView() {
+        return
     }
 }
